@@ -1,0 +1,3 @@
+DROP TABLE EXISTS entries;
+DROP TABLE EXISTS transfers;
+DROP TABLE EXISTS accounts;
