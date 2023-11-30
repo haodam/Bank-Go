@@ -3,7 +3,7 @@ package simplebank
 import (
 	"context"
 	"database/sql"
-	"github.com/haodam/Bank-Go/util"
+	"github.com/haodam/Bank-Go/simplebank/util"
 	"github.com/stretchr/testify/require"
 	"testing"
 	"time"
