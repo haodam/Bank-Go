@@ -3,6 +3,8 @@ package simplebank
 import (
 	"context"
 	"database/sql"
+	"fmt"
+	"github.com/golang/mock/gomock"
 	"github.com/haodam/Bank-Go/simplebank/util"
 	"github.com/stretchr/testify/require"
 	"testing"
@@ -10,6 +12,9 @@ import (
 )
 
 func createRandomAccount(t *testing.T) Account {
+
+	crtl := gomock.NewController(t)
+	fmt.Println(crtl)
 
 	arg := CreateAccountParams{
 		Owner:    util.RandomOwner(),
