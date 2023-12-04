@@ -2,9 +2,9 @@ package main
 
 import (
 	"database/sql"
-	"github.com/haodam/Bank-Go/simplebank/api"
-	db "github.com/haodam/Bank-Go/simplebank/db/sqlc"
-	"github.com/haodam/Bank-Go/simplebank/util"
+	"github.com/haodam/Bank-Go/api"
+	db "github.com/haodam/Bank-Go/db/sqlc"
+	"github.com/haodam/Bank-Go/util"
 	_ "github.com/lib/pq"
 	"log"
 )

@@ -3,9 +3,9 @@ package api
 import (
 	"fmt"
 	"github.com/golang/mock/gomock"
-	mockdb "github.com/haodam/Bank-Go/simplebank/db/mock"
-	db "github.com/haodam/Bank-Go/simplebank/db/sqlc"
-	"github.com/haodam/Bank-Go/simplebank/util"
+	"github.com/haodam/Bank-Go/db/mock"
+	db "github.com/haodam/Bank-Go/db/sqlc"
+	"github.com/haodam/Bank-Go/util"
 	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
