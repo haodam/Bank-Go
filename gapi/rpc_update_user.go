@@ -11,13 +11,23 @@ import (
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"time"
 )
 
 func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest) (*pb.UpdateUserResponse, error) {
 
+	authPayload, err := server.authorizationUser(ctx)
+	if err != nil {
+		return nil, unauthenticatedError(err)
+	}
+
 	violations := validateUpdateUserRequest(req)
 	if violations != nil {
 		return nil, invalidArgumentError(violations)
+	}
+
+	if authPayload.Username != req.GetUsername() {
+		return nil, status.Errorf(codes.PermissionDenied, "cannot update other user`s info")
 	}
 
 	arg := db.UpdateUserParams{
@@ -43,6 +53,11 @@ func (server *Server) UpdateUser(ctx context.Context, req *pb.UpdateUserRequest)
 		}
 	}
 
+	arg.PasswordChangedAt = sql.NullTime{
+		Time:  time.Now(),
+		Valid: true,
+	}
+
 	user, err := server.store.UpdateUser(ctx, arg)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
@@ -65,7 +80,7 @@ func validateUpdateUserRequest(req *pb.UpdateUserRequest) (violations []*errdeta
 	}
 	if req.FullName != nil {
 		if err := val.ValidateFullName(req.GetFullName()); err != nil {
-			violations = append(violations, fieldViolation("username", err))
+			violations = append(violations, fieldViolation("full_name", err))
 		}
 	}
 	if req.Password != nil {

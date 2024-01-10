@@ -81,10 +81,10 @@ var file_service_simple_bank_proto_goTypes = []interface{}{
 	(*LoginUserResponse)(nil),  // 5: pb.LoginUserResponse
 }
 var file_service_simple_bank_proto_depIdxs = []int32{
-	0, // 0: pb.SimpleBank.UserUser:input_type -> pb.CreateUserRequest
+	0, // 0: pb.SimpleBank.CreateUser:input_type -> pb.CreateUserRequest
 	1, // 1: pb.SimpleBank.UpdateUser:input_type -> pb.UpdateUserRequest
 	2, // 2: pb.SimpleBank.LoginUser:input_type -> pb.LoginUserRequest
-	3, // 3: pb.SimpleBank.UserUser:output_type -> pb.CreateUserResponse
+	3, // 3: pb.SimpleBank.CreateUser:output_type -> pb.CreateUserResponse
 	4, // 4: pb.SimpleBank.UpdateUser:output_type -> pb.UpdateUserResponse
 	5, // 5: pb.SimpleBank.LoginUser:output_type -> pb.LoginUserResponse
 	3, // [3:6] is the sub-list for method output_type

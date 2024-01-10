@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	SimpleBank_CreateUser_FullMethodName = "/pb.SimpleBank/UserUser"
+	SimpleBank_CreateUser_FullMethodName = "/pb.SimpleBank/CreateUser"
 	SimpleBank_UpdateUser_FullMethodName = "/pb.SimpleBank/UpdateUser"
 	SimpleBank_LoginUser_FullMethodName  = "/pb.SimpleBank/LoginUser"
 )
@@ -83,7 +83,7 @@ type UnimplementedSimpleBankServer struct {
 }
 
 func (UnimplementedSimpleBankServer) CreateUser(context.Context, *CreateUserRequest) (*CreateUserResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserUser not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method CreateUser not implemented")
 }
 func (UnimplementedSimpleBankServer) UpdateUser(context.Context, *UpdateUserRequest) (*UpdateUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateUser not implemented")
@@ -166,7 +166,7 @@ var SimpleBank_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*SimpleBankServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UserUser",
+			MethodName: "CreateUser",
 			Handler:    _SimpleBank_CreateUser_Handler,
 		},
 		{

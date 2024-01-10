@@ -123,7 +123,7 @@ func RegisterSimpleBankHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.SimpleBank/UserUser", runtime.WithHTTPPathPattern("/v1/create_user"))
+		annotatedContext, err = runtime.AnnotateIncomingContext(ctx, mux, req, "/pb.SimpleBank/CreateUser", runtime.WithHTTPPathPattern("/v1/create_user"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -237,7 +237,7 @@ func RegisterSimpleBankHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
 		var err error
 		var annotatedContext context.Context
-		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/pb.SimpleBank/UserUser", runtime.WithHTTPPathPattern("/v1/create_user"))
+		annotatedContext, err = runtime.AnnotateContext(ctx, mux, req, "/pb.SimpleBank/CreateUser", runtime.WithHTTPPathPattern("/v1/create_user"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
