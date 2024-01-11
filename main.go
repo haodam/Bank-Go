@@ -35,9 +35,8 @@ func main() {
 	runDBMigration(config.MigrationURL, config.DBSource)
 
 	store := db.NewStore(conn)
-	go runGatewayServer(config, store)
-	runGrpcServer(config, store)
-
+	go runGrpcServer(config, store)
+	runGatewayServer(config, store)
 }
 
 func runDBMigration(migrationURL string, dbSource string) {
@@ -57,7 +56,8 @@ func runGrpcServer(config util.Config, store db.Store) {
 		log.Fatal("cannot create server:", err)
 	}
 
-	grpcServer := grpc.NewServer()
+	grpcLogger := grpc.UnaryInterceptor(gapi.GrpcLogger)
+	grpcServer := grpc.NewServer(grpcLogger)
 	pb.RegisterSimpleBankServer(grpcServer, server)
 	reflection.Register(grpcServer)
 
