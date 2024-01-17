@@ -79,7 +79,7 @@ func runTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) {
 func runGrpcServer(config util.Config, store db.Store, taskDistributor worker.TaskDistributor) {
 	server, err := gapi.NewServer(config, store, taskDistributor)
 	if err != nil {
-		log.Fatal().Msg("cannot create server:")
+		log.Fatal().Err(err).Msg("cannot create server:")
 	}
 
 	grpcLogger := grpc.UnaryInterceptor(gapi.GrpcLogger)
@@ -89,19 +89,19 @@ func runGrpcServer(config util.Config, store db.Store, taskDistributor worker.Ta
 
 	listener, err := net.Listen("tcp", config.GRPCServerAddress)
 	if err != nil {
-		log.Fatal().Msg("cannot create listener:")
+		log.Fatal().Err(err).Msg("cannot create listener")
 	}
 	log.Info().Msgf("start gRPC server at %s", listener.Addr().String())
 	err = grpcServer.Serve(listener)
 	if err != nil {
-		log.Fatal().Msg("cannot start gRPC server:")
+		log.Fatal().Err(err).Msg("cannot start gRPC server")
 	}
 }
 
 func runGatewayServer(config util.Config, store db.Store, taskDistributor worker.TaskDistributor) {
 	server, err := gapi.NewServer(config, store, taskDistributor)
 	if err != nil {
-		log.Fatal().Msg("cannot create server:")
+		log.Fatal().Err(err).Msg("cannot create server")
 	}
 
 	// move camel transformation to snake transformation in gRPC
@@ -133,25 +133,25 @@ func runGatewayServer(config util.Config, store db.Store, taskDistributor worker
 
 	listener, err := net.Listen("tcp", config.HTTPServerAddress)
 	if err != nil {
-		log.Fatal().Msg("cannot create listener:")
+		log.Fatal().Err(err).Msg("cannot create listener")
 	}
 
 	log.Info().Msgf("start HTTP gateway server at %s", listener.Addr().String())
 	handler := gapi.HttpLogger(mux)
 	err = http.Serve(listener, handler)
 	if err != nil {
-		log.Fatal().Msg("cannot start HTTP gateway server:")
+		log.Fatal().Err(err).Msg("cannot start HTTP gateway server")
 	}
 }
 
 func runGinServer(config util.Config, store db.Store) {
 	server, err := api.NewServer(config, store)
 	if err != nil {
-		log.Fatal().Msg("cannot create server:")
+		log.Fatal().Err(err).Msg("cannot create server")
 	}
 
 	err = server.Start(config.HTTPServerAddress)
 	if err != nil {
-		log.Fatal().Msg("cannot start server:")
+		log.Fatal().Err(err).Msg("cannot start server")
 	}
 }
