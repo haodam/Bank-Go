@@ -4,27 +4,22 @@ import (
 	"context"
 )
 
-type CreateUserTxParams struct {
-	CreateUserParams
-	AfterCreate func(user User) error
+type VerifyEmailTxParams struct {
+	EmailId    int64
+	SecretCode string
 }
 
-type CreateUserTxResult struct {
-	User User
+type VerifyEmailTxResult struct {
+	User        User
+	VerifyEmail VerifyEmail
 }
 
-func (store *SQLStore) CreateUserTx(ctx context.Context, arg CreateUserTxParams) (CreateUserTxResult, error) {
-	var result CreateUserTxResult
+func (store *SQLStore) VerifyEmailTx(ctx context.Context, arg VerifyEmailTxParams) (VerifyEmailTxResult, error) {
+	var result VerifyEmailTxResult
 
 	err := store.execTx(ctx, func(q *Queries) error {
-		var err error
 
-		result.User, err = q.CreateUser(ctx, arg.CreateUserParams)
-		if err != nil {
-			return err
-		}
-
-		return arg.AfterCreate(result.User)
+		return nil
 	})
 
 	return result, err
