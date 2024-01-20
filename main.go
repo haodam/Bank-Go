@@ -11,6 +11,7 @@ import (
 	"github.com/haodam/Bank-Go/api"
 	db "github.com/haodam/Bank-Go/db/sqlc"
 	"github.com/haodam/Bank-Go/gapi"
+	"github.com/haodam/Bank-Go/mail"
 	"github.com/haodam/Bank-Go/pb"
 	"github.com/haodam/Bank-Go/util"
 	"github.com/haodam/Bank-Go/worker"
@@ -51,7 +52,7 @@ func main() {
 	}
 
 	taskDistributor := worker.NewRedisTaskDistributor(redisOpt)
-	go runTaskProcessor(redisOpt, store)
+	go runTaskProcessor(config, redisOpt, store)
 	go runGrpcServer(config, store, taskDistributor)
 	runGatewayServer(config, store, taskDistributor)
 }
@@ -67,8 +68,9 @@ func runDBMigration(migrationURL string, dbSource string) {
 	log.Info().Msg("db migrated successfully")
 }
 
-func runTaskProcessor(redisOpt asynq.RedisClientOpt, store db.Store) {
-	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store)
+func runTaskProcessor(config util.Config, redisOpt asynq.RedisClientOpt, store db.Store) {
+	mailer := mail.NewGmailSender(config.EmailSenderName, config.EmailSenderAddress, config.EmailSenderPassword)
+	taskProcessor := worker.NewRedisTaskProcessor(redisOpt, store, mailer)
 	log.Info().Msg("start task processor")
 	err := taskProcessor.Start()
 	if err != nil {
