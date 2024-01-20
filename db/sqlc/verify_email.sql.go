@@ -45,11 +45,11 @@ UPDATE verify_emails
 SET
     is_used = TRUE
 WHERE
-        id = $1
+    id = $1
   AND secret_code = $2
   AND is_used = FALSE
   AND expired_at > now()
-    RETURNING id, username, email, secret_code, is_used, created_at, expired_at
+RETURNING id, username, email, secret_code, is_used, created_at, expired_at
 `
 
 type UpdateVerifyEmailParams struct {
