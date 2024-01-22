@@ -2,9 +2,12 @@ package gapi
 
 import (
 	"context"
+	db "github.com/haodam/Bank-Go/db/sqlc"
 	"github.com/haodam/Bank-Go/pb"
 	"github.com/haodam/Bank-Go/val"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 func (server *Server) verifyEmail(ctx context.Context, req *pb.VerifyEmailRequest) (*pb.VerifyEmailResponse, error) {
@@ -14,9 +17,18 @@ func (server *Server) verifyEmail(ctx context.Context, req *pb.VerifyEmailReques
 		return nil, invalidArgumentError(violations)
 	}
 
-	// converter data db.User on pb.User
-	rsp := &pb.VerifyEmailResponse{}
+	txResult, err := server.store.VerifyEmailTx(ctx, db.VerifyEmailTxParams{
+		EmailId:    req.GetEmailId(),
+		SecretCode: req.GetSecretCode(),
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "failed to verify email")
+	}
 
+	// converter data db.User on pb.User
+	rsp := &pb.VerifyEmailResponse{
+		IsVerified: txResult.User.IsEmailVerified,
+	}
 	return rsp, nil
 }
 
