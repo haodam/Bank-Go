@@ -29,7 +29,7 @@ Table accounts as A {
   owner varchar [ref: > U.username ,not null]
   balance bigint [not null]
   currency varchar [not null]
-  created_at timestamp [not null, default: `now()`]
+  created_at timestamptz [not null, default: `now()`]
 
   indexes {
     owner
@@ -41,7 +41,7 @@ Table entries {
   id bigserial [pk]
   account_id bigint [ref: > A.id, not null]
   amount bigint [not null, note: 'can be negative or positive']
-  created_at timestamp [not null, default: `now()`]
+  created_at timestamptz [not null, default: `now()`]
 
   indexes {
     account_id
@@ -53,7 +53,7 @@ Table transfers {
   from_account_id bigint [ref: > A.id,not null]
   to_account_id bigint [ref: > A.id,not null]
   amount bigint [not null, note: 'must be positive']
-  created_at timestamp [not null, default: `now()`]
+  created_at timestamptz [not null, default: `now()`]
 
   indexes {
     from_account_id
