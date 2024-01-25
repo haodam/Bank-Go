@@ -2,14 +2,12 @@ package gapi
 
 import (
 	"context"
-	"errors"
 	db "github.com/haodam/Bank-Go/db/sqlc"
 	"github.com/haodam/Bank-Go/pb"
 	"github.com/haodam/Bank-Go/util"
 	"github.com/haodam/Bank-Go/val"
 	"github.com/haodam/Bank-Go/worker"
 	"github.com/hibiken/asynq"
-	"github.com/lib/pq"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -53,12 +51,8 @@ func (server *Server) CreateUser(ctx context.Context, req *pb.CreateUserRequest)
 
 	txResult, err := server.store.CreateUserTx(ctx, arg)
 	if err != nil {
-		var pqErr *pq.Error
-		if errors.As(err, &pqErr) {
-			switch pqErr.Code.Name() {
-			case "unique_violation":
-				return nil, status.Errorf(codes.AlreadyExists, "username already exitss: %s", err)
-			}
+		if db.ErrorCode(err) == db.UniqueViolation {
+			return nil, status.Errorf(codes.AlreadyExists, "username already exitss: %s", err)
 		}
 		return nil, status.Errorf(codes.Internal, "failed to hash user: %s", err)
 	}
