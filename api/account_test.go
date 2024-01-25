@@ -2,14 +2,15 @@ package api
 
 import (
 	"fmt"
-	"github.com/golang/mock/gomock"
-	"github.com/haodam/Bank-Go/db/mock"
-	db "github.com/haodam/Bank-Go/db/sqlc"
-	"github.com/haodam/Bank-Go/util"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/golang/mock/gomock"
+	mockdb "github.com/haodam/Bank-Go/db/mock"
+	db "github.com/haodam/Bank-Go/db/sqlc"
+	"github.com/haodam/Bank-Go/util"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGetAccount(t *testing.T) {

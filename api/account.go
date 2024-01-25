@@ -1,13 +1,13 @@
 package api
 
 import (
-	"database/sql"
 	"errors"
+	"net/http"
+
 	"github.com/gin-gonic/gin"
 	db "github.com/haodam/Bank-Go/db/sqlc"
 	"github.com/haodam/Bank-Go/token"
 	"github.com/lib/pq"
-	"net/http"
 )
 
 type createAccountRequest struct {
@@ -58,7 +58,7 @@ func (server *Server) getAccount(ctx *gin.Context) {
 
 	account, err := server.store.GetAccount(ctx, req.ID)
 	if err != nil {
-		if err == sql.ErrNoRows {
+		if errors.Is(err, db.ErrRecordNotFound) {
 			ctx.JSON(http.StatusNotFound, errResponse(err))
 			return
 		}

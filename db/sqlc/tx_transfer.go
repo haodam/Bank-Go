@@ -2,7 +2,6 @@ package db
 
 import (
 	"context"
-	"fmt"
 )
 
 // TransferTxParams contains the input parameters of the transfer transaction
@@ -18,24 +17,6 @@ type TransferTxResult struct {
 	ToAccount   Account  `json:"to_account"`
 	FromEntry   Entry    `json:"from_entry"`
 	ToEntry     Entry    `json:"to_entry"`
-}
-
-// ExecTx executes a function within a database transaction
-func (store *SQLStore) execTx(ctx context.Context, fn func(*Queries) error) error {
-	tx, err := store.db.BeginTx(ctx, nil)
-	if err != nil {
-		return err
-	}
-
-	q := New(tx)
-	err = fn(q)
-	if err != nil {
-		if rbErr := tx.Rollback(); rbErr != nil {
-			return fmt.Errorf("tx err: %v , rb err: %v ", err, rbErr)
-		}
-		return err
-	}
-	return tx.Commit()
 }
 
 // TransferTx performs a money transfer from one account to the other.
